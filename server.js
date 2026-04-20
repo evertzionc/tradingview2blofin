@@ -67,9 +67,26 @@ async function blofinRequest(method, path, queryParams = null, body = null) {
     headers,
     body: bodyStr || undefined,
   });
-
-  return res.json();
-}
+  
+  // DEBUG START
+  const rawText = await res.text();
+  console.log("[BLOFIN RAW RESPONSE]", {
+    url,
+    status: res.status,
+    body: rawText,
+  });
+  // DEBUG END
+  
+  let parsed;
+  try {
+    parsed = JSON.parse(rawText);
+  } catch (e) {
+    console.error("[BLOFIN PARSE ERROR]", e.message);
+    return { error: "Invalid JSON from BloFin", raw: rawText };
+  }
+  
+  return parsed;
+  }
 
 // ─── GET FUTURES BALANCE ──────────────────────────────────────────────────────
 async function getUSDTBalance() {
@@ -118,11 +135,17 @@ async function closePosition(instId, marginMode = "cross") {
 
 // ─── PLACE ORDER ─────────────────────────────────────────────────────────────
 async function placeOrder(instId, side, leverage = CONFIG.LEVERAGE) {
+  console.log("DEBUG START ----------------");
   const [balance, markPrice, ctVal] = await Promise.all([
     getUSDTBalance(),
     getMarkPrice(instId),
     getContractSize(instId),
   ]);
+  console.log("BALANCE:", balance);
+  console.log("MARK PRICE:", markPrice);
+  console.log("CTVAL:", ctVal);
+
+  console.log("DEBUG END ----------------");
 
   if (!balance || !markPrice || !ctVal) {
     throw new Error("Failed to fetch market data from BloFin");
