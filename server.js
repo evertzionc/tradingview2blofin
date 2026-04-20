@@ -39,6 +39,14 @@ function sign(path, method, timestamp, nonce, body = "") {
   return Buffer.from(hexdigest).toString("base64");
 }
 
+function toMarketFormat(symbol) {
+  return symbol.replace("-", "-"); // MERL-USDT (keep dash)
+}
+
+function toTradeFormat(symbol) {
+  return symbol.replace("-", ""); // MERLUSDT (no dash)
+}
+
 // ─── BLOFIN API REQUEST ───────────────────────────────────────────────────────
 async function blofinRequest(method, path, queryParams = null, body = null) {
   const timestamp = Date.now().toString();
