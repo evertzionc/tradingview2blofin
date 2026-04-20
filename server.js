@@ -209,7 +209,13 @@ app.post("/webhook", async (req, res) => {
     }
 
  // const instId = symbol || CONFIG.SYMBOL;
-    const rawSymbol = symbol || CONFIG.SYMBOL;
+ // const rawSymbol = symbol || CONFIG.SYMBOL;
+    const raw = symbol || CONFIG.SYMBOL;
+    
+    const instId = {
+      trade: raw.replace("-", ""),
+      market: raw.replace("-", "-"),
+    };
 
 // Convert TradingView format (BTC-USDT) → BloFin format (BTCUSDT)
     const instId = rawSymbol.replace("-", "");
