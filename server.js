@@ -12,6 +12,7 @@ const { randomUUID } = require("crypto");
 
 const app = express();
 app.use(express.json());
+app.use(express.text());
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 const CONFIG = {
@@ -157,7 +158,19 @@ async function placeOrder(instId, side, leverage = CONFIG.LEVERAGE) {
 // ─── WEBHOOK ENDPOINT ─────────────────────────────────────────────────────────
 app.post("/webhook", async (req, res) => {
   try {
-    const { secret, action, symbol, leverage } = req.body;
+    let body = req.body;
+
+    // Handle TradingView sending text instead of JSON
+    if (typeof body === "string") {
+      try {
+        body = JSON.parse(body);
+      } catch (e) {
+        console.error("Invalid JSON from webhook");
+        return res.status(400).send("Bad request");
+      }
+    }
+
+    const { secret, action, symbol, leverage } = body;
 
     if (secret !== CONFIG.WEBHOOK_SECRET) {
       console.warn("[WARN] Invalid webhook secret");
