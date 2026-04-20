@@ -146,8 +146,8 @@ async function placeOrder(instId, side, leverage = CONFIG.LEVERAGE) {
   console.log("DEBUG START ----------------");
   const [balance, markPrice, ctVal] = await Promise.all([
     getUSDTBalance(),
-    getMarkPrice(instId),
-    getContractSize(instId),
+    getMarkPrice(toMarketFormat(instId)),
+    getContractSize(toMarketFormat(instId)),
   ]);
   console.log("BALANCE:", balance);
   console.log("MARK PRICE:", markPrice);
