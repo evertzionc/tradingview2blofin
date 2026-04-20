@@ -177,7 +177,11 @@ app.post("/webhook", async (req, res) => {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const instId = symbol || CONFIG.SYMBOL;
+ // const instId = symbol || CONFIG.SYMBOL;
+    const rawSymbol = symbol || CONFIG.SYMBOL;
+
+// Convert TradingView format (BTC-USDT) → BloFin format (BTCUSDT)
+    const instId = rawSymbol.replace("-", "");
     const side = action?.toLowerCase();
     const lev = parseInt(leverage) || CONFIG.LEVERAGE;
 
