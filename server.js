@@ -145,7 +145,7 @@ async function placeOrder(symbolRaw, side, leverage) {
     side,
     orderType: "market",
     size: contracts.toString(),
-    brokerId: "None"
+    brokerId: "21102126541"
   });
 }
 
