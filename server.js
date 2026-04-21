@@ -100,7 +100,7 @@ async function getMarkPrice(instIdMarket) {
     { instId: instIdMarket }
   );
 
-  return parseFloat(data?.data?.[0]?.markPx || 0);
+  return parseFloat(data?.data?.[0]?.contractValue || 1);
 }
 
 async function getContractSize(instIdMarket) {
