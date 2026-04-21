@@ -145,7 +145,7 @@ async function placeOrder(symbolRaw, side, leverage) {
     side,
     orderType: "market",
     size: contracts.toString(),
-    brokerId: "YOUR_BROKER_ID"
+    brokerId: "blofin"
   });
 }
 
